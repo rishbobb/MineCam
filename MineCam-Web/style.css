@@ -1,0 +1,120 @@
+@import url("https://fonts.googleapis.com/css2?family=Source+Code+Pro&display=swap");
+
+body {
+  font-family: "Source Code Pro", monospace;
+  margin: 0;
+  padding: 0;
+  background-color: rgb(33, 33, 33);
+  color: white;
+}
+
+.bar p {
+  color: white;
+  padding: 0.01em 1em;
+  font-size: 1em;
+}
+
+.bar {
+  overflow: hidden;
+  background-color: black;
+  border: none;
+}
+
+.section {
+  border-radius: 18px;
+  background-color: black;
+  margin: 1.5em;
+}
+
+.canvas {
+  border-radius: 13px;
+  width: 32em;
+  height: 18em;
+  margin: 1.5em 1.5em 0em 1.5em;
+}
+
+.videos {
+  display: flex;
+}
+
+.info {
+  margin: 0em 0.5em 0.5em 0.8em;
+}
+
+.infodiv {
+  border-radius: 8px;
+  background-color: rgb(33, 33, 33);
+  margin: 0.8em 1.5em 1.5em 1.5em;
+}
+
+.slider {
+  -webkit-appearance: none;
+  width: 80%;
+  height: 25px;
+  background: #d3d3d3;
+  outline: none;
+  opacity: 0.7;
+  -webkit-transition: 0.2s;
+  transition: opacity 0.2s;
+}
+
+.slider:hover {
+  opacity: 1;
+}
+
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 25px;
+  height: 25px;
+  background: rgb(33, 33, 33);
+  cursor: pointer;
+}
+
+.slider::-moz-range-thumb {
+  width: 25px;
+  height: 25px;
+  background: rgb(33, 33, 33);
+  cursor: pointer;
+}
+
+.settingsection {
+  margin-left: 5em;
+  margin-top: 3em;
+}
+
+.settings {
+  width: 61.5%;
+  padding-top: 0.05%;
+  padding-bottom: 5%;
+}
+
+.sectiontitle {
+  margin-top: 2em;
+}
+
+.loading {
+  display: flex;
+  position: absolute;
+}
+
+.loader {
+  border: 5px solid darkgray; /* Light grey */
+  border-top: 5px solid lavender; /* Blue */
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  animation: spin 5s linear infinite;
+  opacity: 0.5;
+  margin-top: 13px;
+  margin-left: 5px;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

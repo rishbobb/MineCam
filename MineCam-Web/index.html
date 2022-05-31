@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+
+    <!-- Mediapipe -->
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script> 
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/control_utils/control_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/face_mesh.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/pose/pose.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js" crossorigin="anonymous"></script>
+
+    <!-- Some utils (kalman filter and euler angles) -->
+    <script src="dist/three.min.js"></script>
+    <script src="dist/kalman-filter.min.js"></script>
+
+    <link rel="stylesheet" href="style.css" />
+  </head>
+
+  <body>
+    <div class="hidden">
+      <video id="input_video" style="display: none"></video>
+    </div>
+
+    <div id="loading" class="loading">
+      <p>Loading...</p>
+      <div class="loader" id="loader"></div>
+    </div>
+
+    <div id="maincontent" style="display:none">
+      <div class="bar">
+        <p>MineCam v1.0.0</p>
+      </div>
+
+      <div class="videos">
+        <div class="section video">
+          <canvas id="output_canvas_video" class="canvas"></canvas>
+          <div class="infodiv">
+            <p id="videoInfo" class="info"></p>
+          </div>
+        </div>
+
+        <div class="section head">
+          <canvas id="output_canvas_head" class="canvas"></canvas>
+          <div class="infodiv">
+            <p id="headInfo" class="info"></p>
+          </div>
+        </div>
+      </div>
+
+      <div class="videos">
+        <div class="section pose">
+          <canvas id="output_canvas_pose" class="canvas"></canvas>
+          <div class="infodiv">
+            <p id="poseInfo" class="info"></p>
+          </div>
+        </div>
+
+        <div class="section hands">
+          <canvas id="output_canvas_hands" class="canvas"></canvas>
+          <div class="infodiv">
+            <p id="handsInfo" class="info"></p>
+          </div>
+        </div>
+      </div>
+
+      <div class="section settings">
+        <p style="display: none">.</p>
+        <div class="settingsection">
+          <h1 class="sectiontitle">Head</h1>
+
+          <div class="sliderdiv">
+            <p>Head Sensitivity <p class="slide_display" id="head_sensitivity"></p></p>
+            <input
+              type="range"
+              min="1"
+              max="500"
+              value="1"
+              class="slider"
+              id="head_sensitivity"
+            />
+          </div>
+
+          <div class="sliderdiv">
+            <p>Head Pitch Offset <p class="slide_display" id="head_pitchOffset"></p></p>
+            <input
+              type="range"
+              min="-100"
+              max="100"
+              value="1"
+              class="slider"
+              id="head_pitchOffset"
+            />
+          </div>
+        </div>
+
+        <div class="settingsection">
+          <h1 class="sectiontitle">Pose</h1>
+
+          <div class="sliderdiv">
+            <p>Mine Sensitivity <p class="slide_display" id="pose_mineSensitivity"></p></p>
+            <input
+              type="range"
+              min="1"
+              max="500"
+              value="1"
+              class="slider"
+              id="pose_mineSensitivity"
+            />
+          </div>
+
+          <div class="sliderdiv">
+            <p>Walk Sensitivity <p class="slide_display" id="pose_walkSensitivity"></p></p>
+            <input
+              type="range"
+              min="1"
+              max="100"
+              value="1"
+              class="slider"
+              id="pose_walkSensitivity"
+            />
+          </div>
+
+          <div class="sliderdiv">
+            <p>Jump Sensitivity <p class="slide_display" id="pose_jumpSensitivity"></p></p>
+            <input
+              type="range"
+              min="1"
+              max="200"
+              value="1"
+              class="slider"
+              id="pose_jumpSensitivity"
+            />
+          </div>
+        </div>
+
+        <div class="settingsection">
+          <h1 class="sectiontitle">Hands</h1>
+
+          <div class="sliderdiv">
+            <p>Finger Command Delay (ms) <p class="slide_display" id="hands_commandDelay"></p></p>
+            <input
+              type="range"
+              min="500"
+              max="10000"
+              value="1"
+              class="slider"
+              id="hands_commandDelay"
+            />
+          </div>
+
+          <div class="sliderdiv">
+            <p>Hotbar Command Delay (ms) <p class="slide_display" id="hands_hotbarDelay"></p></p>
+            <input
+              type="range"
+              min="500"
+              max="10000"
+              value="1"
+              class="slider"
+              id="hands_hotbarDelay"
+            />
+          </div>
+
+          <div class="sliderdiv">
+            <p>Finger Threshold <p class="slide_display" id="hands_fingerThreshold"></p></p>
+            <input
+              type="range"
+              min="1"
+              max="100"
+              value="1"
+              class="slider"
+              id="hands_fingerThreshold"
+            />
+          </div>
+        </div>
+
+        <div class="settingsection">
+          <h1 class="sectiontitle">Miscellaneous</h1>
+
+          <div class="selectdiv">
+            <p>Camera Resolution (Requires reload/close program)</p>
+            <select class="select" id="camera_res">
+              <option value="640x480">640x480</option>
+              <option value="800x600">800x600</option>
+              <option value="1280x720">1280x720</option>
+              <option value="1920x1080">1920x1080</option>
+              <option value="1440x2560">1440x2560</option>
+              <option value="3840x2160">3840x2160</option>
+              <option value="3840x1600">3840x1600</option>
+            </select>
+          </div>
+
+          <div class="selectdiv">
+            <p>Display Resolution</p>
+            <select class="select" id="display_res">
+              <option value="640x480">640x480</option>
+              <option value="800x600">800x600</option>
+              <option value="1280x720">1280x720</option>
+              <option value="1920x1080">1920x1080</option>
+              <option value="1440x2560">1440x2560</option>
+              <option value="3840x2160">3840x2160</option>
+              <option value="3840x1600">3840x1600</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Script that runs the show -->
+    <script type="module" src="script.js"></script>
+  </body>
+</html>
