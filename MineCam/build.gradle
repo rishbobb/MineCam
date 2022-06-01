@@ -183,6 +183,13 @@ publishing {
 
 task compileWeb {
     group 'minecam'
+
+    doLast {
+        exec {
+            workingDir "${project.projectDir}/../MineCam-Web/"
+            executable "pwd"
+        }
+    }
 }
 
 task compileWebServer {
