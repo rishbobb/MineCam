@@ -188,6 +188,7 @@ task compileWeb {
         exec {
             workingDir "${project.projectDir}/../MineCam-Web/"
             executable "pwd"
+            args "."
         }
     }
 }
