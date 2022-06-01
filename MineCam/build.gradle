@@ -208,8 +208,48 @@ task compileWebServer {
     group 'minecam util'
 }
 
-task compileApp {
+task prepareAppDev {
     group 'minecam util'
+
+    doLast {
+        exec {
+            workingDir "${project.projectDir}/../minecam-app/"
+            executable "npm"
+            args "install"
+        }
+    }
+}
+
+task openAppDev {
+    group 'minecam util'
+
+    doLast {
+        exec {
+            workingDir "${project.projectDir}/../minecam-app/"
+            executable "npx"
+            args "tauri dev"
+        }
+    }
+}
+
+task buildApp {
+    group 'minecam util'
+
+    doLast {
+        exec {
+            workingDir "${project.projectDir}/../minecam-app/"
+            executable "npx"
+            args "tauri build"
+        }
+    }
+}
+
+task moveApp (type: Copy) {
+    group 'minecam util'
+
+    from "${project.projectDir}/../minecam-app/tauri-src/idk"
+    into "${project.projectDir}/src/main/resources/assets/minecam/"
+    include "MineCam.exe"
 }
 
 task compileMacOSHelper {
