@@ -222,7 +222,6 @@ test_video.mp4
 
 node_modules
 .env
-dist
 
 # Tauri:
 
