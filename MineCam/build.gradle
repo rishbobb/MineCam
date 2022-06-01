@@ -178,3 +178,29 @@ publishing {
         }
     }
 }
+
+// Extra tasks for MineCam dev
+
+task compileWeb {
+    group 'minecam'
+}
+
+task compileWebServer {
+    group 'minecam'
+}
+
+task compileApp {
+    group 'minecam'
+}
+
+task compileMacOSHelper {
+    group 'minecam'
+}
+
+task minecamJar {
+    group 'minecam'
+}
+
+task minecamRunClient {
+    group 'minecam'
+}
