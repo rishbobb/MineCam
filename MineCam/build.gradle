@@ -181,28 +181,46 @@ publishing {
 
 // Extra tasks for MineCam dev
 
-task compileWeb {
-    group 'minecam'
+task zipWeb(type: Zip) {
+    group 'minecam util'
 
-    doLast {
-        exec {
-            workingDir "${project.projectDir}/../MineCam-Web/"
-            executable "pwd"
-            args "."
-        }
-    }
+    from "${project.projectDir}/../minecam-web"
+    include '*'
+    include '*/*'
+    archiveName 'minecam-web.zip'
+    destinationDir(file("${project.projectDir}/src/main/resources/assets/minecam"))
+}
+
+task deleteWeb(type: Delete) {
+    group 'minecam util'
+
+    delete "${project.projectDir}/src/main/resources/assets/minecam/minecam-web.zip"
+}
+
+task compileWeb {
+    group 'minecam util'
+
+    dependsOn deleteWeb
+    finalizedBy zipWeb
 }
 
 task compileWebServer {
-    group 'minecam'
+    group 'minecam util'
 }
 
 task compileApp {
-    group 'minecam'
+    group 'minecam util'
 }
 
 task compileMacOSHelper {
-    group 'minecam'
+    group 'minecam util'
+
+    doLast {
+        exec {
+            workingDir "${project.projectDir}/../minecam-macoshelper"
+            executable "${project.projectDir}/../minecam-macoshelper/compileHelper.sh"
+        }
+    }
 }
 
 task minecamJar {

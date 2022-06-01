@@ -229,3 +229,10 @@ node_modules
 # will have compiled files and executables
 /target/
 WixTools
+
+# MineCam: 
+MineCam/src/main/resources/assets/minecam/minecam-web.zip
+MineCam/src/main/resources/assets/minecam/MineCamWebServer.jar
+MineCam/src/main/resources/assets/minecam/MineCamHelper
+MineCam/src/main/resources/assets/minecam/MineCam.exe
+MineCam/src/main/resources/assets/minecam/MicrosoftEdgeWebview2Setup.exe
