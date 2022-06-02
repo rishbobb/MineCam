@@ -396,6 +396,11 @@ task minecamRunClient {
         else {
             exec {
                 workingDir "${project.projectDir}"
+                executable "chmod"
+                args "+x", "./gradlew"
+            }
+            exec {
+                workingDir "${project.projectDir}"
                 executable "${project.projectDir}/gradlew"
                 args "runClient"
             }
