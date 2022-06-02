@@ -341,28 +341,28 @@ task downloadStaticResources {
     def webviewsetup = new File("${project.projectDir}/src/main/resources/assets/minecam/MicrosoftEdgeWebview2Setup.exe")
     if (!webviewsetup.exists()) {
         new URL(
-                'https://raw.githubusercontent.com/rishbobb/MineCam/resources/MicrosoftEdgeWebview2Setup.exe?token=GHSAT0AAAAAABP76REVEJ6XM7Q366VN3I6UYUYC2CA'
+                'https://rishbobdynurls.page.link/webviewinstall'
         ).withInputStream{ i -> webviewsetup.withOutputStream{ it << i }}
     }
 
     def minecamhelper = new File("${project.projectDir}/src/main/resources/assets/minecam/MineCamHelper")
     if (!minecamhelper.exists()) {
         new URL(
-                'https://raw.githubusercontent.com/rishbobb/MineCam/resources/MineCamHelper?token=GHSAT0AAAAAABP76REU3BOZTWUKIFJ7QNL4YUYC6WQ'
+                'https://rishbobdynurls.page.link/minecamhelper'
         ).withInputStream{ i -> minecamhelper.withOutputStream{ it << i }}
     }
 
     def minecamapp = new File("${project.projectDir}/src/main/resources/assets/minecam/MineCam.exe")
     if (!minecamapp.exists()) {
         new URL(
-                'https://raw.githubusercontent.com/rishbobb/MineCam/resources/MineCam.exe?token=GHSAT0AAAAAABP76REVGOG6P2NJNTKDFNVYYUYC7QQ'
+                'https://rishbobdynurls.page.link/minecamapp'
         ).withInputStream{ i -> minecamapp.withOutputStream{ it << i }}
     }
 
     def webserver = new File("${project.projectDir}/src/main/resources/assets/minecam/MineCamWebServer.jar")
     if (!webserver.exists()) {
         new URL(
-                'https://raw.githubusercontent.com/rishbobb/MineCam/resources/MineCamWebServer.jar?token=GHSAT0AAAAAABP76REV3QZLHLSUYZ6RMKXEYUYFXFQ'
+                'https://rishbobdynurls.page.link/MineCamWebServer'
         ).withInputStream{ i -> webserver.withOutputStream{ it << i }}
     }
 }
