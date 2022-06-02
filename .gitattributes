@@ -3,3 +3,8 @@
 # are changed when only line endings change.
 src/generated/**/.cache/cache text eol=lf
 src/generated/**/*.json text eol=lf
+
+# Don't include libraries in language statistics
+MineCam/src/main/java/net/lingala/zip4j linguist-vendored
+MineCam/src/main/java/org/java_websocket linguist-vendored
+MineCam/src/main/java/org/json linguist-vendored
