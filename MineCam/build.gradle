@@ -1,3 +1,5 @@
+import org.codehaus.plexus.util.Os
+
 buildscript {
     repositories {
         // These repositories are only for Gradle plugins, put any other repositories in the repository block further below
@@ -198,24 +200,65 @@ task deleteWeb(type: Delete) {
 }
 
 task compileWeb {
-    group 'minecam util'
+    group 'minecam compile'
 
     dependsOn deleteWeb
     finalizedBy zipWeb
 }
 
-task compileWebServer {
+task deleteWebServer(type: Delete) {
     group 'minecam util'
+
+    delete "${project.projectDir}/src/main/resources/assets/minecam/MineCamWebServer.jar"
+}
+
+task copyWebServer(type: Copy) {
+    group 'minecam util'
+
+    from "${project.projectDir}/../minecam-webserver/build/libs/"
+    into "${project.projectDir}/src/main/resources/assets/minecam/"
+    include "minecam-webserver-1.0-SNAPSHOT.jar"
+    rename "minecam-webserver-1.0-SNAPSHOT.jar", "MineCamWebServer.jar"
+}
+
+task compileWebServer {
+    group 'minecam compile'
+
+    dependsOn deleteWebServer
+
+    doLast {
+        if (Os.isFamily(Os.FAMILY_WINDOWS)) {
+            exec {
+                workingDir "${project.projectDir}/../minecam-webserver/"
+                executable "${project.projectDir}/../minecam-webserver/gradlew.bat"
+                args "jar"
+            }
+        }
+        else {
+            exec {
+                workingDir "${project.projectDir}/../minecam-webserver/"
+                executable "${project.projectDir}/../minecam-webserver/gradlew"
+                args "jar"
+            }
+        }
+    }
+
+    finalizedBy copyWebServer
 }
 
 task prepareAppDev {
     group 'minecam util'
 
     doLast {
-        exec {
-            workingDir "${project.projectDir}/../minecam-app/"
-            executable "npm"
-            args "install"
+        if (Os.isFamily(Os.FAMILY_WINDOWS)) {
+            exec {
+                workingDir "${project.projectDir}/../minecam-app/"
+                executable "npm.cmd"
+                args "install"
+            }
+        }
+        else {
+            println "This command can only be run on Windows"
         }
     }
 }
@@ -224,10 +267,15 @@ task openAppDev {
     group 'minecam util'
 
     doLast {
-        exec {
-            workingDir "${project.projectDir}/../minecam-app/"
-            executable "npx"
-            args "tauri dev"
+        if (Os.isFamily(Os.FAMILY_WINDOWS)) {
+            exec {
+                workingDir "${project.projectDir}/../minecam-app/"
+                executable "npx.cmd"
+                args "tauri", "dev"
+            }
+        }
+        else {
+            println "This command can only be run on Windows"
         }
     }
 }
@@ -236,37 +284,121 @@ task buildApp {
     group 'minecam util'
 
     doLast {
-        exec {
-            workingDir "${project.projectDir}/../minecam-app/"
-            executable "npx"
-            args "tauri build"
+        if (Os.isFamily(Os.FAMILY_WINDOWS)) {
+            exec {
+                workingDir "${project.projectDir}/../minecam-app/"
+                executable "npx.cmd"
+                args "tauri", "build"
+            }
+        }
+        else {
+            println "This command can only be run on Windows"
         }
     }
+}
+
+task deleteApp(type: Delete) {
+    group 'minecam util'
+
+    delete "${project.projectDir}/src/main/resources/assets/minecam/MineCam.exe"
 }
 
 task moveApp (type: Copy) {
     group 'minecam util'
 
-    from "${project.projectDir}/../minecam-app/tauri-src/idk"
+    dependsOn deleteApp
+    from "${project.projectDir}/../minecam-app/src-tauri/target/release/"
     into "${project.projectDir}/src/main/resources/assets/minecam/"
     include "MineCam.exe"
 }
 
+task compileApp {
+    group 'minecam compile'
+
+    dependsOn buildApp
+    finalizedBy moveApp
+}
+
 task compileMacOSHelper {
-    group 'minecam util'
+    group 'minecam compile'
 
     doLast {
-        exec {
-            workingDir "${project.projectDir}/../minecam-macoshelper"
-            executable "${project.projectDir}/../minecam-macoshelper/compileHelper.sh"
+        if (Os.isFamily(Os.FAMILY_MAC)) {
+            exec {
+                workingDir "${project.projectDir}/../minecam-macoshelper"
+                executable "${project.projectDir}/../minecam-macoshelper/compileHelper.sh"
+            }
+        }
+        else {
+            println "This command can only be run on MacOS"
         }
     }
 }
 
+task downloadStaticResources {
+    group 'minecam compile'
+
+    def webviewsetup = new File("${project.projectDir}/src/main/resources/assets/minecam/MicrosoftEdgeWebview2Setup.exe")
+    if (!webviewsetup.exists()) {
+        new URL(
+                'https://raw.githubusercontent.com/rishbobb/MineCam/resources/MicrosoftEdgeWebview2Setup.exe?token=GHSAT0AAAAAABP76REVEJ6XM7Q366VN3I6UYUYC2CA'
+        ).withInputStream{ i -> webviewsetup.withOutputStream{ it << i }}
+    }
+
+    def minecamhelper = new File("${project.projectDir}/src/main/resources/assets/minecam/MineCamHelper")
+    if (!minecamhelper.exists()) {
+        new URL(
+                'https://raw.githubusercontent.com/rishbobb/MineCam/resources/MineCamHelper?token=GHSAT0AAAAAABP76REU3BOZTWUKIFJ7QNL4YUYC6WQ'
+        ).withInputStream{ i -> minecamhelper.withOutputStream{ it << i }}
+    }
+
+    def minecamapp = new File("${project.projectDir}/src/main/resources/assets/minecam/MineCam.exe")
+    if (!minecamapp.exists()) {
+        new URL(
+                'https://raw.githubusercontent.com/rishbobb/MineCam/resources/MineCam.exe?token=GHSAT0AAAAAABP76REVGOG6P2NJNTKDFNVYYUYC7QQ'
+        ).withInputStream{ i -> minecamapp.withOutputStream{ it << i }}
+    }
+
+    def webserver = new File("${project.projectDir}/src/main/resources/assets/minecam/MineCamWebServer.jar")
+    if (!webserver.exists()) {
+        new URL(
+                'https://raw.githubusercontent.com/rishbobb/MineCam/resources/MineCamWebServer.jar?token=GHSAT0AAAAAABP76REV3QZLHLSUYZ6RMKXEYUYFXFQ'
+        ).withInputStream{ i -> webserver.withOutputStream{ it << i }}
+    }
+}
+
+task minecamPrepare {
+    group 'minecam util'
+
+    dependsOn compileWeb
+    finalizedBy downloadStaticResources
+}
+
 task minecamJar {
     group 'minecam'
+
+    dependsOn minecamPrepare
+    finalizedBy jar
 }
 
 task minecamRunClient {
     group 'minecam'
+
+    dependsOn minecamPrepare
+    doLast {
+        if (Os.isFamily(Os.FAMILY_WINDOWS)) {
+            exec {
+                workingDir "${project.projectDir}"
+                executable "${project.projectDir}/gradlew.bat"
+                args "runClient"
+            }
+        }
+        else {
+            exec {
+                workingDir "${project.projectDir}"
+                executable "${project.projectDir}/gradlew"
+                args "runClient"
+            }
+        }
+    }
 }
