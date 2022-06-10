@@ -341,28 +341,28 @@ task downloadStaticResources {
     def webviewsetup = new File("${project.projectDir}/src/main/resources/assets/minecam/MicrosoftEdgeWebview2Setup.exe")
     if (!webviewsetup.exists()) {
         new URL(
-                'https://rishbobdynurls.page.link/webviewinstall'
+                'https://link.rishabhroy.com/link/MicrosoftEdgeWebview2Setup.exe'
         ).withInputStream{ i -> webviewsetup.withOutputStream{ it << i }}
     }
 
     def minecamhelper = new File("${project.projectDir}/src/main/resources/assets/minecam/MineCamHelper")
     if (!minecamhelper.exists()) {
         new URL(
-                'https://rishbobdynurls.page.link/minecamhelper'
+                'https://link.rishabhroy.com/link/MineCamHelper'
         ).withInputStream{ i -> minecamhelper.withOutputStream{ it << i }}
     }
 
     def minecamapp = new File("${project.projectDir}/src/main/resources/assets/minecam/MineCam.exe")
     if (!minecamapp.exists()) {
         new URL(
-                'https://rishbobdynurls.page.link/minecamapp'
+                'https://link.rishabhroy.com/link/MineCam.exe'
         ).withInputStream{ i -> minecamapp.withOutputStream{ it << i }}
     }
 
     def webserver = new File("${project.projectDir}/src/main/resources/assets/minecam/MineCamWebServer.jar")
     if (!webserver.exists()) {
         new URL(
-                'https://rishbobdynurls.page.link/MineCamWebServer'
+                'https://link.rishabhroy.com/link/MineCamWebServer.jar'
         ).withInputStream{ i -> webserver.withOutputStream{ it << i }}
     }
 }
