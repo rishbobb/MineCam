@@ -237,6 +237,11 @@ task compileWebServer {
         else {
             exec {
                 workingDir "${project.projectDir}/../minecam-webserver/"
+                executable "chmod"
+                args "+x", "./gradlew"
+            }
+            exec {
+                workingDir "${project.projectDir}/../minecam-webserver/"
                 executable "${project.projectDir}/../minecam-webserver/gradlew"
                 args "jar"
             }
