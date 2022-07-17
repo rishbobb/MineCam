@@ -13,16 +13,16 @@ class ProgramOptions {
 
     // Pose Movement
     this.pose_mineSensitivity = 250;
-    this.pose_mineFilteringRuns = 10;
+    this.pose_mineFilteringRuns = 5;
     this.pose_walkSensitivity = 29;
-    this.pose_walkFilteringRuns = 10;
+    this.pose_walkFilteringRuns = 5;
     this.pose_jumpSensitivity = 100;
     this.pose_jumpDelay = 500;
 
     // Hand Movement
     this.hands_lowPassRuns = 2;
     this.hands_hotbarDelay = 500;
-    this.hands_commandDelay = 500;
+    this.hands_commandDelay = 700;
     this.hands_fingerThreshold = 10;
     this.hands_fingerRuns = 8;
 
