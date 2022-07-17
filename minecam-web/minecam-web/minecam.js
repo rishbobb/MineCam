@@ -1,3 +1,4 @@
+// Get a Kalman Filter
 var { KalmanFilter } = kalmanFilter;
 
 // Options for the entire backend

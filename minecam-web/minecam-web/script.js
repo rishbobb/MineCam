@@ -56,7 +56,7 @@ const minecam = new MineCam(options);
 // Run MineCam
 minecam.run();
 
-//MINECAM->UI
+// MINECAM->UI
 
 // Sliders
 
@@ -116,3 +116,11 @@ document.getElementById("display_res").onchange = () => {
   options.global_screenDimensions = [x, y];
   updateOptions(options);
 };
+
+// Reset settings
+
+document.getElementById("reset_settings").onclick = () => {
+  options = new ProgramOptions();
+  options.global_logErrors = false;
+  updateOptions(options)
+}

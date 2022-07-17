@@ -118,3 +118,7 @@ body {
     transform: rotate(360deg);
   }
 }
+
+.resetsettings {
+  text-decoration: underline;
+}
