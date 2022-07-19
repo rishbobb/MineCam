@@ -18,11 +18,8 @@ if (localStorage.getItem("minecam_options_set") == "true") {
   options.pose_processCallback = (object) => {};
   options.hands_processCallback = (object) => {};
   options.load_callback = () => {};
-
-  options.global_logErrors = false;
 } else {
   options = new ProgramOptions();
-  options.global_logErrors = false;
 }
 
 // Set load callback
@@ -117,10 +114,60 @@ document.getElementById("display_res").onchange = () => {
   updateOptions(options);
 };
 
+// Checkboxes
+
+let checkboxes = document.getElementsByClassName("checkbox");
+for (let i = 0; i < checkboxes.length; i++) {
+  let currentCheckbox = checkboxes[i];
+  currentCheckbox.checked = options[currentCheckbox.id];
+  currentCheckbox.onchange = () => {
+    options[currentCheckbox.id] = currentCheckbox.checked;
+    updateOptions(options);
+  };
+
+  if (currentCheckbox.id == "global_uiShowAdvancedOptions") {
+    currentCheckbox.onchange = () => {
+      options[currentCheckbox.id] = currentCheckbox.checked;
+      updateOptions(options);
+      let advanced = document.getElementsByClassName("advancedoption");
+      if (options.global_uiShowAdvancedOptions) {
+        for (let i = 0; i < advanced.length; i++) {
+          advanced[i].style.display = "block";
+
+          if (advanced[i].classList.contains("flex")) {
+            advanced[i].style.display = "flex";
+          }
+        }
+      } else {
+        for (let i = 0; i < advanced.length; i++) {
+          advanced[i].style.display = "none";
+        }
+      }
+    };
+  }
+}
+
 // Reset settings
 
 document.getElementById("reset_settings").onclick = () => {
   options = new ProgramOptions();
   options.global_logErrors = false;
-  updateOptions(options)
+  updateOptions(options);
+};
+
+// Hide advanced options
+
+let advanced = document.getElementsByClassName("advancedoption");
+if (options.global_uiShowAdvancedOptions) {
+  for (let i = 0; i < advanced.length; i++) {
+    advanced[i].style.display = "block";
+
+    if (advanced[i].classList.contains("flex")) {
+      advanced[i].style.display = "flex";
+    }
+  }
+} else {
+  for (let i = 0; i < advanced.length; i++) {
+    advanced[i].style.display = "none";
+  }
 }

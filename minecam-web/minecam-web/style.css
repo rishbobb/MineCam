@@ -122,3 +122,7 @@ body {
 .resetsettings {
   text-decoration: underline;
 }
+
+.advancedoption p {
+  color: red;
+}

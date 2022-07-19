@@ -93,6 +93,51 @@
               id="head_pitchOffset"
             />
           </div>
+
+          <div class="sliderdiv advancedoption">
+            <p>Head Behavior History Index <p class="slide_display" id="head_behaviorBackwardsIndex"></p></p>
+            <input
+              type="range"
+              min="1"
+              max="20"
+              value="1"
+              class="slider"
+              id="head_behaviorBackwardsIndex"
+            />
+          </div>
+
+          <div class="sliderdiv advancedoption">
+            <p>Head Behavior Center Offset Measurement <p class="slide_display" id="head_centerMeasurement"></p></p>
+            <input
+              type="range"
+              min="1"
+              max="50"
+              value="1"
+              class="slider"
+              id="head_centerMeasurement"
+            />
+          </div>
+
+          <div class="sliderdiv advancedoption">
+            <p>Number of Low Pass Filter Runs <p class="slide_display" id="head_lowPassRuns"></p></p>
+            <input
+              type="range"
+              min="1"
+              max="30"
+              value="1"
+              class="slider"
+              id="head_lowPassRuns"
+            />
+          </div>
+
+          <div class="checkboxdiv advancedoption flex" style="display:flex">
+            <input
+              type="checkbox"
+              class="checkbox"
+              id="head_useKalmanFilter"
+            />
+            <p>Use Kalman Filter</p>
+          </div>
         </div>
 
         <div class="settingsection">
@@ -131,6 +176,42 @@
               value="1"
               class="slider"
               id="pose_jumpSensitivity"
+            />
+          </div>
+
+          <div class="sliderdiv advancedoption">
+            <p>Mine Context Runs <p class="slide_display" id="pose_mineFilteringRuns"></p></p>
+            <input
+              type="range"
+              min="1"
+              max="25"
+              value="1"
+              class="slider"
+              id="pose_mineFilteringRuns"
+            />
+          </div>
+
+          <div class="sliderdiv advancedoption">
+            <p>Walk Context Runs <p class="slide_display" id="pose_walkFilteringRuns"></p></p>
+            <input
+              type="range"
+              min="1"
+              max="25"
+              value="1"
+              class="slider"
+              id="pose_walkFilteringRuns"
+            />
+          </div>
+
+          <div class="sliderdiv advancedoption">
+            <p>Jump Delay (ms) <p class="slide_display" id="pose_jumpDelay"></p></p>
+            <input
+              type="range"
+              min="500"
+              max="10000"
+              value="1"
+              class="slider"
+              id="pose_jumpDelay"
             />
           </div>
         </div>
@@ -173,21 +254,57 @@
               id="hands_fingerThreshold"
             />
           </div>
+
+          <div class="sliderdiv advancedoption">
+            <p>Number of Low Pass Filter Runs <p class="slide_display" id="hands_lowPassRuns"></p></p>
+            <input
+              type="range"
+              min="1"
+              max="20"
+              value="1"
+              class="slider"
+              id="hands_lowPassRuns"
+            />
+          </div>
+
+          <div class="sliderdiv advancedoption">
+            <p>Context Runs <p class="slide_display" id="hands_fingerRuns"></p></p>
+            <input
+              type="range"
+              min="1"
+              max="30"
+              value="1"
+              class="slider"
+              id="hands_fingerRuns"
+            />
+          </div>
         </div>
 
         <div class="settingsection">
           <h1 class="sectiontitle">Miscellaneous</h1>
 
+          <div class="sliderdiv">
+            <p>Global Data Threshold <p class="slide_display" id="global_dataSpliceThreshold"></p></p>
+            <input
+              type="range"
+              min="1"
+              max="500"
+              value="1"
+              class="slider"
+              id="global_dataSpliceThreshold"
+            />
+          </div>
+
           <div class="selectdiv">
-            <p>Camera Resolution (Requires reload/close program)</p>
+            <p>Camera Resolution (Requires reload)</p>
             <select class="select" id="camera_res">
               <option value="640x480">640x480</option>
               <option value="800x600">800x600</option>
               <option value="1280x720">1280x720</option>
               <option value="1920x1080">1920x1080</option>
               <option value="1440x2560">1440x2560</option>
-              <option value="3840x2160">3840x2160</option>
               <option value="3840x1600">3840x1600</option>
+              <option value="3840x2160">3840x2160</option>
             </select>
           </div>
 
@@ -199,14 +316,50 @@
               <option value="1280x720">1280x720</option>
               <option value="1920x1080">1920x1080</option>
               <option value="1440x2560">1440x2560</option>
-              <option value="3840x2160">3840x2160</option>
               <option value="3840x1600">3840x1600</option>
+              <option value="3840x2160">3840x2160</option>
             </select>
+          </div>
+
+          <div class="checkboxdiv advancedoption flex" style="display:flex">
+            <input
+              type="checkbox"
+              class="checkbox"
+              id="global_render"
+            />
+            <p>Render Video Feeds</p>
+          </div>
+
+          <div class="checkboxdiv advancedoption flex" style="display:flex">
+            <input
+              type="checkbox"
+              class="checkbox"
+              id="global_logErrors"
+            />
+            <p>Log Errors to Console</p>
+          </div>
+
+          <div class="checkboxdiv advancedoption flex" style="display:flex">
+            <input
+              type="checkbox"
+              class="checkbox"
+              id="global_printStatsToScreen"
+            />
+            <p>Display Statistics</p>
+          </div>
+
+          <div class="checkboxdiv flex" style="display:flex">
+            <input
+              type="checkbox"
+              class="checkbox"
+              id="global_uiShowAdvancedOptions"
+            />
+            <p>Show Advanced Options</p>
           </div>
         </div>
 
         <div class="settingsection">
-          <a href="#" class="resetsettings" id="reset_settings">Reset Settings</a>
+          <a href="#" class="resetsettings" id="reset_settings">Reset Settings (Requires reload)</a>
         </div>
       </div>
     </div>

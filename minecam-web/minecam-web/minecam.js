@@ -10,6 +10,7 @@ class ProgramOptions {
     this.head_centerMeasurement = 10;
     this.head_lowPassRuns = 5;
     this.head_pitchOffset = -50;
+    this.head_useKalmanFilter = true;
 
     // Pose Movement
     this.pose_mineSensitivity = 250;
@@ -28,12 +29,13 @@ class ProgramOptions {
 
     // Global Options
     this.global_render = true;
-    this.global_logErrors = true;
+    this.global_logErrors = false;
     this.global_screenDimensions = [1920, 1080];
     this.global_cameraDimensions = [1920, 1080];
     this.global_printStatsToScreen = true;
     this.global_dataSpliceThreshold = 200;
     this.global_port = 6969;
+    this.global_uiShowAdvancedOptions = false;
 
     // Callbacks
     this.global_processCallback = async () => {};
