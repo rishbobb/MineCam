@@ -429,7 +429,11 @@ class HeadMovementHandler {
       thisInstance.resultQueue.push([pitch, yaw, roll]);
 
       // Apply kalman filter
-      let res1 = thisInstance.kFilter.filterAll(thisInstance.resultQueue);
+      if (thisInstance.options.head_useKalmanFilter) {
+        var res1 = thisInstance.kFilter.filterAll(thisInstance.resultQueue);
+      } else {
+        var res1 = thisInstance.resultQueue;
+      }
 
       // Get latest result
       var res = res1[res1.length - 1];
