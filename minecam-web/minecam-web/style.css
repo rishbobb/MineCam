@@ -94,20 +94,23 @@ body {
 }
 
 .loading {
-  display: flex;
+  display: block;
   position: absolute;
+
+  /* Center div Lol */
+  top: 50%;
+  left: 50%;
+  margin: -80px 0 0 -80px;
 }
 
 .loader {
-  border: 5px solid darkgray; /* Light grey */
-  border-top: 5px solid lavender; /* Blue */
+  border: 20px solid darkgray; /* Light grey */
+  border-top: 20px solid lavender; /* Blue */
   border-radius: 50%;
-  width: 20px;
-  height: 20px;
-  animation: spin 5s linear infinite;
+  width: 80px;
+  height: 80px;
+  animation: spin 3s linear infinite;
   opacity: 0.5;
-  margin-top: 13px;
-  margin-left: 5px;
 }
 
 @keyframes spin {
@@ -125,4 +128,8 @@ body {
 
 .advancedoption p {
   color: red;
+}
+
+.checkboxtext {
+  margin-left: 1%;
 }

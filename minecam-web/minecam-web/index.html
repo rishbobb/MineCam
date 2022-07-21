@@ -19,13 +19,12 @@
   </head>
 
   <body>
-    <div class="hidden">
-      <video id="input_video" style="display: none"></video>
+    <div id="loading" class="loading">
+      <div class="loader" id="loader"></div>
     </div>
 
-    <div id="loading" class="loading">
-      <p>Loading...</p>
-      <div class="loader" id="loader"></div>
+    <div class="hidden">
+      <video id="input_video" style="display: none"></video>
     </div>
 
     <div id="maincontent" style="display:none">
@@ -136,7 +135,7 @@
               class="checkbox"
               id="head_useKalmanFilter"
             />
-            <p>Use Kalman Filter</p>
+            <p class="checkboxtext">Use Kalman Filter</p>
           </div>
         </div>
 
@@ -327,7 +326,7 @@
               class="checkbox"
               id="global_render"
             />
-            <p>Render Video Feeds</p>
+            <p class="checkboxtext">Render Video Feeds</p>
           </div>
 
           <div class="checkboxdiv advancedoption flex" style="display:flex">
@@ -336,7 +335,7 @@
               class="checkbox"
               id="global_logErrors"
             />
-            <p>Log Errors to Console</p>
+            <p class="checkboxtext">Log Errors to Console</p>
           </div>
 
           <div class="checkboxdiv advancedoption flex" style="display:flex">
@@ -345,7 +344,7 @@
               class="checkbox"
               id="global_printStatsToScreen"
             />
-            <p>Display Statistics</p>
+            <p class="checkboxtext">Display Statistics</p>
           </div>
 
           <div class="checkboxdiv flex" style="display:flex">
@@ -354,7 +353,7 @@
               class="checkbox"
               id="global_uiShowAdvancedOptions"
             />
-            <p>Show Advanced Options</p>
+            <p class="checkboxtext">Show Advanced Options</p>
           </div>
         </div>
 
