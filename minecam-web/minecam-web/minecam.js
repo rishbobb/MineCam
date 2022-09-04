@@ -19,6 +19,7 @@ class ProgramOptions {
     this.pose_walkFilteringRuns = 5;
     this.pose_jumpSensitivity = 100;
     this.pose_jumpDelay = 500;
+    this.pose_mineVisibilityThreshold = 0.5;
 
     // Hand Movement
     this.hands_lowPassRuns = 2;
@@ -612,6 +613,7 @@ class PoseMovementHandler {
         thisInstance.options.global_screenDimensions[0],
       results.poseLandmarks[11].y *
         thisInstance.options.global_screenDimensions[1],
+      results.poseLandmarks[16].visibility,
     ]);
 
     // Mining
@@ -641,6 +643,13 @@ class PoseMovementHandler {
       if (filteredMining == null) {
         filteredMining = false;
       }
+    }
+    if (
+      thisInstance.resultQueue[thisInstance.resultQueue.length - 1][3] <
+      thisInstance.options.pose_mineVisibilityThreshold
+    ) {
+      mining = false;
+      filteredMining = false;
     }
     thisInstance.mineQueue.push(mining);
     thisInstance.writeBuffer.addInfo("Mining: " + filteredMining);

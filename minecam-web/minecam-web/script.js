@@ -80,6 +80,12 @@ for (let i = 0; i < componentlist.length; i++) {
   let currentSlider = componentlist[i].slider;
   let currentDisplay = componentlist[i].slide_display;
   currentSlider.onchange = () => {
+    if (currentSlider.id == "pose_mineVisibilityThreshold") {
+      options[currentSlider.id] = currentSlider.value / 10;
+      currentDisplay.innerHTML = options[currentSlider.id];
+      updateOptions(options);
+      return;
+    }
     options[currentSlider.id] = currentSlider.value;
     currentDisplay.innerHTML = options[currentSlider.id];
     updateOptions(options);
