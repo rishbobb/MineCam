@@ -1,19 +1,27 @@
 {
+  "build": {
+    "beforeDevCommand": "",
+    "beforeBuildCommand": "",
+    "devPath": "../src",
+    "distDir": "../src",
+    "withGlobalTauri": true
+  },
   "package": {
     "productName": "MineCam",
-    "version": "0.1.0"
-  },
-  "build": {
-    "distDir": "../dist",
-    "devPath": "../dist",
-    "beforeDevCommand": "",
-    "beforeBuildCommand": ""
+    "version": "0.5.0"
   },
   "tauri": {
+    "allowlist": {
+      "all": true
+    },
     "bundle": {
       "active": true,
-      "targets": "all",
-      "identifier": "com.rishabhroy.MineCamApp",
+      "category": "DeveloperTool",
+      "copyright": "",
+      "deb": {
+        "depends": []
+      },
+      "externalBin": [],
       "icon": [
         "icons/32x32.png",
         "icons/128x128.png",
@@ -21,33 +29,29 @@
         "icons/icon.icns",
         "icons/icon.ico"
       ],
-      "resources": [],
-      "externalBin": [],
-      "copyright": "",
-      "category": "DeveloperTool",
-      "shortDescription": "",
+      "identifier": "com.rishabhroy.MineCamApp",
       "longDescription": "",
-      "deb": {
-        "depends": []
-      },
       "macOS": {
-        "frameworks": [],
+        "entitlements": null,
         "exceptionDomain": "",
-        "signingIdentity": null,
+        "frameworks": [],
         "providerShortName": null,
-        "entitlements": null
+        "signingIdentity": null
       },
+      "resources": [],
+      "shortDescription": "",
+      "targets": "all",
       "windows": {
         "certificateThumbprint": null,
         "digestAlgorithm": "sha256",
         "timestampUrl": ""
       }
     },
+    "security": {
+      "csp": null
+    },
     "updater": {
       "active": false
-    },
-    "allowlist": {
-      "all": true
     },
     "windows": [
       {
@@ -57,9 +61,6 @@
         "resizable": true,
         "fullscreen": false
       }
-    ],
-    "security": {
-      "csp": null
-    }
+    ]
   }
 }
