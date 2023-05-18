@@ -129,6 +129,30 @@
             />
           </div>
 
+          <div class="sliderdiv advancedoption">
+            <p>Number of Linear Interpolation Runs <p class="slide_display" id="head_linearInterpolationRuns"></p></p>
+            <input
+              type="range"
+              min="1"
+              max="30"
+              value="2"
+              class="slider"
+              id="head_linearInterpolationRuns"
+            />
+          </div>
+
+          <div class="sliderdiv advancedoption">
+            <p>Linear Interpolation Factor <p class="slide_display" id="head_linearInterpolationFactor"></p></p>
+            <input
+              type="range"
+              min="0.01"
+              max="1"
+              value="0.3"
+              class="slider"
+              id="head_linearInterpolationFactor"
+            />
+          </div>
+
           <div class="checkboxdiv advancedoption flex" style="display:flex">
             <input
               type="checkbox"
@@ -136,6 +160,15 @@
               id="head_useKalmanFilter"
             />
             <p class="checkboxtext">Use Kalman Filter</p>
+          </div>
+
+          <div class="checkboxdiv advancedoption flex" style="display:flex">
+            <input
+              type="checkbox"
+              class="checkbox"
+              id="head_useLinearInterpolation"
+            />
+            <p class="checkboxtext">Enable Linear Interpolation</p>
           </div>
         </div>
 

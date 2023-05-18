@@ -11,6 +11,9 @@ class ProgramOptions {
     this.head_lowPassRuns = 5;
     this.head_pitchOffset = -50;
     this.head_useKalmanFilter = true;
+    this.head_useLinearInterpolation = false;
+    this.head_linearInterpolationRuns = 2;
+    this.head_linearInterpolationFactor = 0.3;
 
     // Pose Movement
     this.pose_mineSensitivity = 250;
@@ -377,6 +380,12 @@ class HeadMovementHandler {
     }
   }
 
+  LERP([y, z, x], [y2, z2, x2], f = 0.3) {
+    const v = new THREE.Vector3(x, y, z);
+    v.lerp(new THREE.Vector3(x2, y2, z2), f);
+    return [v.y, v.z, v.x];
+  }
+
   // Run on results from facemesh
   onResults(results, thisInstance) {
     // Render
@@ -424,6 +433,23 @@ class HeadMovementHandler {
               ][2]) /
             2;
         } catch (e) {}
+      }
+
+      // WIP: Linear Interpolation
+      if (thisInstance.options.head_useLinearInterpolation) {
+        for (
+          let i = 0;
+          i < thisInstance.options.head_linearInterpolationRuns;
+          i++
+        ) {
+          thisInstance.resultQueue.push(
+            thisInstance.LERP(
+              thisInstance.resultQueue[thisInstance.resultQueue.length - 1],
+              [pitch, yaw, roll],
+              thisInstance.options.head_linearInterpolationFactor
+            )
+          );
+        }
       }
 
       // Add to history
