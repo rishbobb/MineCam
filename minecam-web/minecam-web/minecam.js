@@ -11,8 +11,8 @@ class ProgramOptions {
     this.head_lowPassRuns = 5;
     this.head_pitchOffset = -50;
     this.head_useKalmanFilter = true;
-    this.head_useLinearInterpolation = false;
-    this.head_linearInterpolationRuns = 2;
+    this.head_useLinearInterpolation = true;
+    this.head_linearInterpolationRuns = 5;
     this.head_linearInterpolationFactor = 0.3;
 
     // Pose Movement
@@ -435,7 +435,7 @@ class HeadMovementHandler {
         } catch (e) {}
       }
 
-      // WIP: Linear Interpolation
+      // Linear Interpolation
       if (thisInstance.options.head_useLinearInterpolation) {
         for (
           let i = 0;
