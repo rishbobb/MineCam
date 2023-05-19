@@ -112,6 +112,7 @@ document.getElementById("camera_res").onchange = () => {
   var [x, y] = document.getElementById("camera_res").value.split("x");
   options.global_cameraDimensions = [x, y];
   updateOptions(options);
+  location.reload();
 };
 
 document.getElementById("display_res").onchange = () => {
