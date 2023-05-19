@@ -159,6 +159,7 @@ document.getElementById("reset_settings").onclick = () => {
   options = new ProgramOptions();
   options.global_logErrors = false;
   updateOptions(options);
+  location.reload();
 };
 
 // Hide advanced options
