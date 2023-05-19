@@ -13,7 +13,7 @@ class ProgramOptions {
     this.head_useKalmanFilter = true;
     this.head_useLinearInterpolation = true;
     this.head_linearInterpolationRuns = 5;
-    this.head_linearInterpolationFactor = 0.3;
+    this.head_linearInterpolationFactor = 3;
 
     // Pose Movement
     this.pose_mineSensitivity = 250;
@@ -446,7 +446,7 @@ class HeadMovementHandler {
             thisInstance.LERP(
               thisInstance.resultQueue[thisInstance.resultQueue.length - 1],
               [pitch, yaw, roll],
-              thisInstance.options.head_linearInterpolationFactor
+              thisInstance.options.head_linearInterpolationFactor / 10
             )
           );
         }
