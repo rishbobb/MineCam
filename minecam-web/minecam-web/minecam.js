@@ -257,7 +257,7 @@ class HeadMovementHandler {
         this.onResults(results, this);
       } catch (e) {
         if (this.options.global_logErrors) {
-          console.log("[HEAD]\n" + e + ` [line ${e.lineNumber}]`);
+          console.log("[HEAD]\n" + e + `\n${e.stack}`);
         }
       }
     });
@@ -569,7 +569,7 @@ class PoseMovementHandler {
         this.onResults(results, this);
       } catch (e) {
         if (this.options.global_logErrors) {
-          console.log("[POSE]\n" + e + ` [line ${e.lineNumber}]`);
+          console.log("[POSE]\n" + e + `\n${e.stack}`);
         }
       }
     });
@@ -808,7 +808,7 @@ class HandMovementHandler {
         this.onResults(results, this);
       } catch (e) {
         if (this.options.global_logErrors) {
-          console.log("[HANDS]\n" + e + ` [line ${e.lineNumber}]`);
+          console.log("[HANDS]\n" + e + `\n${e.stack}`);
         }
       }
     });
