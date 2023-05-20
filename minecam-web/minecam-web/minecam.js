@@ -442,13 +442,18 @@ class HeadMovementHandler {
           i < thisInstance.options.head_linearInterpolationRuns;
           i++
         ) {
-          thisInstance.resultQueue.push(
-            thisInstance.LERP(
-              thisInstance.resultQueue[thisInstance.resultQueue.length - 1],
-              [pitch, yaw, roll],
-              thisInstance.options.head_linearInterpolationFactor / 10
-            )
-          );
+          if (
+            thisInstance.resultQueue[thisInstance.resultQueue.length - 1] !=
+            undefined
+          ) {
+            thisInstance.resultQueue.push(
+              thisInstance.LERP(
+                thisInstance.resultQueue[thisInstance.resultQueue.length - 1],
+                [pitch, yaw, roll],
+                thisInstance.options.head_linearInterpolationFactor / 10
+              )
+            );
+          }
         }
       }
 
