@@ -1,7 +1,7 @@
 # MineCam
 Play Minecraft with your webcam!
 
-Mod JAR available under Releases
+**Forge Mod JAR available under Releases**
 
 # Notes
 I didn't really want to release this since it is by far incomplete and sometimes unusable, but many people have asked so I have finally released it.
