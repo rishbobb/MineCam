@@ -387,15 +387,15 @@ class HeadMovementHandler {
   }
 
   // Run on results from facemesh
-  onResults(results, thisInstance) {
+  onResults(results) {
     // Render
-    if (thisInstance.options.global_render) {
-      thisInstance.drawLandmarks(results);
+    if (this.options.global_render) {
+      this.drawLandmarks(results);
     }
 
     if (results.multiFaceGeometry) {
       // Get {yaw, pitch, roll}
-      let params = thisInstance.getParams(results);
+      let params = this.getParams(results);
       if (!params) {
         return;
       }
@@ -404,53 +404,53 @@ class HeadMovementHandler {
       let roll = params.roll;
 
       // Apply low pass filter
-      for (let i = 0; i < thisInstance.options.head_lowPassRuns; i++) {
+      for (let i = 0; i < this.options.head_lowPassRuns; i++) {
         try {
           pitch =
             (pitch +
-              thisInstance.resultQueue[
-                thisInstance.resultQueue.length - i
+              this.resultQueue[
+                this.resultQueue.length - i
               ][0]) /
             2;
         } catch (e) {}
       }
-      for (let i = 0; i < thisInstance.options.head_lowPassRuns; i++) {
+      for (let i = 0; i < this.options.head_lowPassRuns; i++) {
         try {
           yaw =
             (yaw +
-              thisInstance.resultQueue[
-                thisInstance.resultQueue.length - i
+              this.resultQueue[
+                this.resultQueue.length - i
               ][1]) /
             2;
         } catch (e) {}
       }
-      for (let i = 0; i < thisInstance.options.head_lowPassRuns; i++) {
+      for (let i = 0; i < this.options.head_lowPassRuns; i++) {
         try {
           roll =
             (roll +
-              thisInstance.resultQueue[
-                thisInstance.resultQueue.length - i
+              this.resultQueue[
+                this.resultQueue.length - i
               ][2]) /
             2;
         } catch (e) {}
       }
 
       // Linear Interpolation
-      if (thisInstance.options.head_useLinearInterpolation) {
+      if (this.options.head_useLinearInterpolation) {
         for (
           let i = 0;
-          i < thisInstance.options.head_linearInterpolationRuns;
+          i < this.options.head_linearInterpolationRuns;
           i++
         ) {
           if (
-            thisInstance.resultQueue[thisInstance.resultQueue.length - 1] !=
+            this.resultQueue[this.resultQueue.length - 1] !=
             undefined
           ) {
-            thisInstance.resultQueue.push(
-              thisInstance.LERP(
-                thisInstance.resultQueue[thisInstance.resultQueue.length - 1],
+            this.resultQueue.push(
+              this.LERP(
+                this.resultQueue[this.resultQueue.length - 1],
                 [pitch, yaw, roll],
-                thisInstance.options.head_linearInterpolationFactor / 10
+                this.options.head_linearInterpolationFactor / 10
               )
             );
           }
@@ -458,13 +458,13 @@ class HeadMovementHandler {
       }
 
       // Add to history
-      thisInstance.resultQueue.push([pitch, yaw, roll]);
+      this.resultQueue.push([pitch, yaw, roll]);
 
       // Apply kalman filter
-      if (thisInstance.options.head_useKalmanFilter) {
-        var res1 = thisInstance.kFilter.filterAll(thisInstance.resultQueue);
+      if (this.options.head_useKalmanFilter) {
+        var res1 = this.kFilter.filterAll(this.resultQueue);
       } else {
-        var res1 = thisInstance.resultQueue;
+        var res1 = this.resultQueue;
       }
 
       // Get latest result
@@ -472,62 +472,62 @@ class HeadMovementHandler {
 
       // Send to the mod
       if (
-        thisInstance.headMovementProfile.shouldMoveYaw(thisInstance.resultQueue)
+        this.headMovementProfile.shouldMoveYaw(this.resultQueue)
       ) {
-        thisInstance.sendHistory.push({
+        this.sendHistory.push({
           pitch:
-            Math.trunc(res[0] * thisInstance.options.head_sensitivity) +
-            thisInstance.options.head_pitchOffset,
+            Math.trunc(res[0] * this.options.head_sensitivity) +
+            this.options.head_pitchOffset,
           yaw:
-            Math.trunc(res[1] * thisInstance.options.head_sensitivity) * -1 +
-            thisInstance.yawOffset,
-          roll: Math.trunc(res[2] * thisInstance.options.head_sensitivity),
+            Math.trunc(res[1] * this.options.head_sensitivity) * -1 +
+            this.yawOffset,
+          roll: Math.trunc(res[2] * this.options.head_sensitivity),
         });
-        thisInstance.com.sendHeadMovement(
-          Math.trunc(res[0] * thisInstance.options.head_sensitivity) +
-            thisInstance.options.head_pitchOffset,
-          Math.trunc(res[1] * thisInstance.options.head_sensitivity) * -1 +
-            thisInstance.yawOffset,
-          Math.trunc(res[2] * thisInstance.options.head_sensitivity)
+        this.com.sendHeadMovement(
+          Math.trunc(res[0] * this.options.head_sensitivity) +
+            this.options.head_pitchOffset,
+          Math.trunc(res[1] * this.options.head_sensitivity) * -1 +
+            this.yawOffset,
+          Math.trunc(res[2] * this.options.head_sensitivity)
         );
       } else {
-        thisInstance.yawOffset =
-          thisInstance.sendHistory[thisInstance.sendHistory.length - 1].yaw -
+        this.yawOffset =
+          this.sendHistory[this.sendHistory.length - 1].yaw -
           Math.trunc(res[1] * this.options.head_sensitivity) * -1;
-        thisInstance.sendHistory.push({
+        this.sendHistory.push({
           pitch:
-            Math.trunc(res[0] * thisInstance.options.head_sensitivity) +
-            thisInstance.options.head_pitchOffset,
-          yaw: thisInstance.sendHistory[thisInstance.sendHistory.length - 1]
+            Math.trunc(res[0] * this.options.head_sensitivity) +
+            this.options.head_pitchOffset,
+          yaw: this.sendHistory[this.sendHistory.length - 1]
             .yaw,
-          roll: Math.trunc(res[2] * thisInstance.options.head_sensitivity),
+          roll: Math.trunc(res[2] * this.options.head_sensitivity),
         });
-        thisInstance.com.sendHeadMovement(
-          Math.trunc(res[0] * thisInstance.options.head_sensitivity) +
-            thisInstance.options.head_pitchOffset,
-          thisInstance.sendHistory[thisInstance.sendHistory.length - 1].yaw,
-          Math.trunc(res[2] * thisInstance.options.head_sensitivity)
+        this.com.sendHeadMovement(
+          Math.trunc(res[0] * this.options.head_sensitivity) +
+            this.options.head_pitchOffset,
+          this.sendHistory[this.sendHistory.length - 1].yaw,
+          Math.trunc(res[2] * this.options.head_sensitivity)
         );
       }
 
-      thisInstance.writeBuffer.addInfo("Pitch: " + res[0]);
-      thisInstance.writeBuffer.addInfo("Yaw: " + res[1]);
-      thisInstance.writeBuffer.addInfo("Roll: " + res[2]);
+      this.writeBuffer.addInfo("Pitch: " + res[0]);
+      this.writeBuffer.addInfo("Yaw: " + res[1]);
+      this.writeBuffer.addInfo("Roll: " + res[2]);
 
-      thisInstance.options.head_processCallback(res);
+      this.options.head_processCallback(res);
 
       // Shave off queue for performance
       if (
-        thisInstance.resultQueue.length >
-        thisInstance.options.global_dataSpliceThreshold
+        this.resultQueue.length >
+        this.options.global_dataSpliceThreshold
       ) {
-        thisInstance.resultQueue = thisInstance.resultQueue.splice(
-          thisInstance.resultQueue.length / 2
+        this.resultQueue = this.resultQueue.splice(
+          this.resultQueue.length / 2
         );
       }
     }
     // Refresh the render
-    thisInstance.options.headRenderCanvas.canvasCtx.restore();
+    this.options.headRenderCanvas.canvasCtx.restore();
   }
 
   async send(x) {
@@ -630,20 +630,20 @@ class PoseMovementHandler {
   }
 
   // Run on results from pose
-  onResults(results, thisInstance) {
+  onResults(results) {
     // Render
-    if (thisInstance.options.global_render) {
-      thisInstance.drawLandmarks(results);
+    if (this.options.global_render) {
+      this.drawLandmarks(results);
     }
 
     // Push to history
-    thisInstance.resultQueue.push([
+    this.resultQueue.push([
       results.poseLandmarks[16].y *
-        thisInstance.options.global_screenDimensions[1],
+        this.options.global_screenDimensions[1],
       results.poseLandmarks[11].x *
-        thisInstance.options.global_screenDimensions[0],
+        this.options.global_screenDimensions[0],
       results.poseLandmarks[11].y *
-        thisInstance.options.global_screenDimensions[1],
+        this.options.global_screenDimensions[1],
       results.poseLandmarks[16].visibility,
     ]);
 
@@ -653,20 +653,20 @@ class PoseMovementHandler {
     if (
       Math.abs(
         Math.abs(
-          thisInstance.resultQueue[thisInstance.resultQueue.length - 1][0] -
-            thisInstance.resultQueue[thisInstance.resultQueue.length - 1][2]
+          this.resultQueue[this.resultQueue.length - 1][0] -
+            this.resultQueue[this.resultQueue.length - 1][2]
         ) -
           Math.abs(
-            thisInstance.resultQueue[thisInstance.resultQueue.length - 2][0] -
-              thisInstance.resultQueue[thisInstance.resultQueue.length - 2][2]
+            this.resultQueue[this.resultQueue.length - 2][0] -
+              this.resultQueue[this.resultQueue.length - 2][2]
           )
-      ) > thisInstance.options.pose_mineSensitivity
+      ) > this.options.pose_mineSensitivity
     ) {
       mining = true;
       filteredMining = true;
     } else {
       mining = false;
-      for (let i = 0; i < thisInstance.options.pose_mineFilteringRuns; i++) {
+      for (let i = 0; i < this.options.pose_mineFilteringRuns; i++) {
         if (this.mineQueue[this.mineQueue.length - i]) {
           filteredMining = true;
         }
@@ -676,29 +676,29 @@ class PoseMovementHandler {
       }
     }
     if (
-      thisInstance.resultQueue[thisInstance.resultQueue.length - 1][3] <
-      thisInstance.options.pose_mineVisibilityThreshold
+      this.resultQueue[this.resultQueue.length - 1][3] <
+      this.options.pose_mineVisibilityThreshold
     ) {
       mining = false;
       filteredMining = false;
     }
-    thisInstance.mineQueue.push(mining);
-    thisInstance.writeBuffer.addInfo("Mining: " + filteredMining);
+    this.mineQueue.push(mining);
+    this.writeBuffer.addInfo("Mining: " + filteredMining);
 
     // Walking
     let walking = null;
     let filteredWalking = null;
     if (
       Math.abs(
-        thisInstance.resultQueue[thisInstance.resultQueue.length - 1][1] -
-          thisInstance.resultQueue[thisInstance.resultQueue.length - 2][1]
-      ) > thisInstance.options.pose_walkSensitivity
+        this.resultQueue[this.resultQueue.length - 1][1] -
+          this.resultQueue[this.resultQueue.length - 2][1]
+      ) > this.options.pose_walkSensitivity
     ) {
       walking = true;
       filteredWalking = true;
     } else {
       walking = false;
-      for (let i = 0; i < thisInstance.options.pose_walkFilteringRuns; i++) {
+      for (let i = 0; i < this.options.pose_walkFilteringRuns; i++) {
         if (this.walkQueue[this.walkQueue.length - i]) {
           filteredWalking = true;
         }
@@ -707,31 +707,31 @@ class PoseMovementHandler {
         filteredWalking = false;
       }
     }
-    thisInstance.walkQueue.push(walking);
-    thisInstance.writeBuffer.addInfo("Walking: " + filteredWalking);
+    this.walkQueue.push(walking);
+    this.writeBuffer.addInfo("Walking: " + filteredWalking);
 
     // Jumping
     let jumping = false;
     if (
       Math.abs(
-        thisInstance.resultQueue[thisInstance.resultQueue.length - 1][2] -
-          thisInstance.resultQueue[thisInstance.resultQueue.length - 2][2]
-      ) > thisInstance.options.pose_jumpSensitivity
+        this.resultQueue[this.resultQueue.length - 1][2] -
+          this.resultQueue[this.resultQueue.length - 2][2]
+      ) > this.options.pose_jumpSensitivity
     ) {
-      if (thisInstance.canJump) {
+      if (this.canJump) {
         jumping = true;
-        thisInstance.canJump = false;
+        this.canJump = false;
         setTimeout(() => {
-          thisInstance.canJump = true;
-        }, thisInstance.options.pose_jumpDelay);
+          this.canJump = true;
+        }, this.options.pose_jumpDelay);
       }
     }
-    thisInstance.writeBuffer.addInfo("Jumping: " + jumping);
+    this.writeBuffer.addInfo("Jumping: " + jumping);
 
     // Send data
-    thisInstance.com.sendBodyMovement(filteredMining, filteredWalking, jumping);
+    this.com.sendBodyMovement(filteredMining, filteredWalking, jumping);
 
-    thisInstance.options.pose_processCallback({
+    this.options.pose_processCallback({
       filteredMining,
       filteredWalking,
       jumping,
@@ -739,27 +739,27 @@ class PoseMovementHandler {
 
     // Splice data
     if (
-      thisInstance.resultQueue.length >
-      thisInstance.options.global_dataSpliceThreshold
+      this.resultQueue.length >
+      this.options.global_dataSpliceThreshold
     ) {
-      thisInstance.resultQueue = thisInstance.resultQueue.splice(
-        thisInstance.resultQueue.length / 2
+      this.resultQueue = this.resultQueue.splice(
+        this.resultQueue.length / 2
       );
     }
     if (
-      thisInstance.mineQueue.length >
-      thisInstance.options.global_dataSpliceThreshold
+      this.mineQueue.length >
+      this.options.global_dataSpliceThreshold
     ) {
-      thisInstance.mineQueue = thisInstance.mineQueue.splice(
-        thisInstance.mineQueue.length / 2
+      this.mineQueue = this.mineQueue.splice(
+        this.mineQueue.length / 2
       );
     }
     if (
-      thisInstance.walkQueue.length >
-      thisInstance.options.global_dataSpliceThreshold
+      this.walkQueue.length >
+      this.options.global_dataSpliceThreshold
     ) {
-      thisInstance.walkQueue = thisInstance.walkQueue.splice(
-        thisInstance.walkQueue.length / 2
+      this.walkQueue = this.walkQueue.splice(
+        this.walkQueue.length / 2
       );
     }
   }
@@ -890,15 +890,15 @@ class HandMovementHandler {
   }
 
   // Run on results from hands
-  onResults(results, thisInstance) {
+  onResults(results) {
     // Render
-    if (thisInstance.options.global_render) {
-      thisInstance.drawLandmarks(results);
+    if (this.options.global_render) {
+      this.drawLandmarks(results);
     }
 
     // Used for callback later on
-    thisInstance.leftSent = null;
-    thisInstance.rightSent = null;
+    this.leftSent = null;
+    this.rightSent = null;
 
     // Get index of each hand
     let leftIndex = null;
@@ -920,102 +920,102 @@ class HandMovementHandler {
       // Get x and y
       let x =
         (1 - results.multiHandLandmarks[leftIndex][8].x) *
-        thisInstance.options.global_screenDimensions[0];
+        this.options.global_screenDimensions[0];
       let y =
         results.multiHandLandmarks[leftIndex][8].y *
-        thisInstance.options.global_screenDimensions[1];
+        this.options.global_screenDimensions[1];
 
       // Get x of another point to use for fist detection (click)
       let x2 =
         (1 - results.multiHandLandmarks[leftIndex][6].x) *
-        thisInstance.options.global_screenDimensions[0];
+        this.options.global_screenDimensions[0];
       let y2 =
         results.multiHandLandmarks[leftIndex][6].y *
-        thisInstance.options.global_screenDimensions[1];
+        this.options.global_screenDimensions[1];
 
       if (y2 < y) {
-        if (!thisInstance.leftPressed) {
-          thisInstance.leftPressed = true;
+        if (!this.leftPressed) {
+          this.leftPressed = true;
         }
       } else {
-        if (thisInstance.leftPressed) {
-          thisInstance.leftPressed = false;
+        if (this.leftPressed) {
+          this.leftPressed = false;
         }
       }
 
       x =
         (1 - results.multiHandLandmarks[leftIndex][5].x) *
-        thisInstance.options.global_screenDimensions[0];
+        this.options.global_screenDimensions[0];
       y =
         results.multiHandLandmarks[leftIndex][5].y *
-        thisInstance.options.global_screenDimensions[1];
+        this.options.global_screenDimensions[1];
 
       // Low pass
-      for (let i = 0; i < thisInstance.options.hands_lowPassRuns; i++) {
+      for (let i = 0; i < this.options.hands_lowPassRuns; i++) {
         try {
           x =
             (x +
-              thisInstance.leftResultQueue[
-                thisInstance.leftResultQueue.length - i
+              this.leftResultQueue[
+                this.leftResultQueue.length - i
               ][0]) /
             2;
         } catch (e) {}
       }
-      for (let i = 0; i < thisInstance.options.hands_lowPassRuns; i++) {
+      for (let i = 0; i < this.options.hands_lowPassRuns; i++) {
         try {
           y =
             (y +
-              thisInstance.leftResultQueue[
-                thisInstance.leftResultQueue.length - i
+              this.leftResultQueue[
+                this.leftResultQueue.length - i
               ][1]) /
             2;
         } catch (e) {}
       }
 
       // Push to list of coords
-      thisInstance.leftResultQueue.push([x, y]);
+      this.leftResultQueue.push([x, y]);
 
-      thisInstance.com.sendLeftHandMovement(
-        thisInstance.leftResultQueue[
-          thisInstance.leftResultQueue.length - 1
+      this.com.sendLeftHandMovement(
+        this.leftResultQueue[
+          this.leftResultQueue.length - 1
         ][0],
-        thisInstance.leftResultQueue[
-          thisInstance.leftResultQueue.length - 1
+        this.leftResultQueue[
+          this.leftResultQueue.length - 1
         ][1],
-        thisInstance.leftPressed
+        this.leftPressed
       );
-      thisInstance.leftSent = {
-        x: thisInstance.leftResultQueue[
-          thisInstance.leftResultQueue.length - 1
+      this.leftSent = {
+        x: this.leftResultQueue[
+          this.leftResultQueue.length - 1
         ][0],
-        y: thisInstance.leftResultQueue[
-          thisInstance.leftResultQueue.length - 1
+        y: this.leftResultQueue[
+          this.leftResultQueue.length - 1
         ][1],
-        pressed: thisInstance.leftPressed,
+        pressed: this.leftPressed,
       };
 
-      thisInstance.writeBuffer.addInfo(
+      this.writeBuffer.addInfo(
         `Left Hand:
               x: ${
-                thisInstance.leftResultQueue[
-                  thisInstance.leftResultQueue.length - 1
+                this.leftResultQueue[
+                  this.leftResultQueue.length - 1
                 ][0]
               } <br />
               y: ${
-                thisInstance.leftResultQueue[
-                  thisInstance.leftResultQueue.length - 1
+                this.leftResultQueue[
+                  this.leftResultQueue.length - 1
                 ][1]
               } <br />
-              pressed: ${thisInstance.leftPressed}`
+              pressed: ${this.leftPressed}`
       );
 
       // Shave off queue for performance
       if (
-        thisInstance.leftResultQueue.length >
-        thisInstance.options.global_dataSpliceThreshold
+        this.leftResultQueue.length >
+        this.options.global_dataSpliceThreshold
       ) {
-        thisInstance.leftResultQueue = thisInstance.leftResultQueue.splice(
-          thisInstance.leftResultQueue.length / 2
+        this.leftResultQueue = this.leftResultQueue.splice(
+          this.leftResultQueue.length / 2
         );
       }
     }
@@ -1034,18 +1034,18 @@ class HandMovementHandler {
         // Get x and y
         let x =
           (1 - results.multiHandLandmarks[rightIndex][fingers[i][0]].x) *
-          thisInstance.options.global_screenDimensions[0];
+          this.options.global_screenDimensions[0];
         let y =
           results.multiHandLandmarks[rightIndex][fingers[i][0]].y *
-          thisInstance.options.global_screenDimensions[1];
+          this.options.global_screenDimensions[1];
 
         // Get x of another point to use for fist detection (click)
         let x2 =
           (1 - results.multiHandLandmarks[rightIndex][fingers[i][1]].x) *
-          thisInstance.options.global_screenDimensions[0];
+          this.options.global_screenDimensions[0];
         let y2 =
           results.multiHandLandmarks[rightIndex][fingers[i][1]].y *
-          thisInstance.options.global_screenDimensions[1];
+          this.options.global_screenDimensions[1];
 
         if (y < y2) {
           fingercounter = fingercounter + 1;
@@ -1054,75 +1054,75 @@ class HandMovementHandler {
 
       let x =
         (1 - results.multiHandLandmarks[rightIndex][4].x) *
-        thisInstance.options.global_screenDimensions[0];
+        this.options.global_screenDimensions[0];
 
       let x2 =
         (1 - results.multiHandLandmarks[rightIndex][3].x) *
-        thisInstance.options.global_screenDimensions[0];
+        this.options.global_screenDimensions[0];
 
       if (
         x > x2 &&
-        Math.abs(x - x2) > thisInstance.options.hands_fingerThreshold
+        Math.abs(x - x2) > this.options.hands_fingerThreshold
       ) {
         fingercounter = fingercounter + 1;
       }
 
-      thisInstance.rightIndexResultQueue.push(fingercounter);
+      this.rightIndexResultQueue.push(fingercounter);
 
       if (fingercounter == 5) {
-        if (thisInstance.canSendHotbarUpdate) {
-          thisInstance.iterateHotbar("plus");
-          thisInstance.com.sendHotbarChange(thisInstance.hotbarSlot);
-          thisInstance.canSendHotbarUpdate = false;
+        if (this.canSendHotbarUpdate) {
+          this.iterateHotbar("plus");
+          this.com.sendHotbarChange(this.hotbarSlot);
+          this.canSendHotbarUpdate = false;
           setTimeout(() => {
-            thisInstance.canSendHotbarUpdate = true;
-          }, thisInstance.options.hands_hotbarDelay);
+            this.canSendHotbarUpdate = true;
+          }, this.options.hands_hotbarDelay);
         }
       }
 
-      if (thisInstance.lastSentRightHand == 0) {
-        if (thisInstance.getFingerUp(fingercounter)) {
-          thisInstance.com.sendRightHandMovement(fingercounter);
-          thisInstance.rightSent = fingercounter;
-          thisInstance.lastSentRightHand = fingercounter;
+      if (this.lastSentRightHand == 0) {
+        if (this.getFingerUp(fingercounter)) {
+          this.com.sendRightHandMovement(fingercounter);
+          this.rightSent = fingercounter;
+          this.lastSentRightHand = fingercounter;
           setTimeout(() => {
-            thisInstance.lastSentRightHand = 0;
-            thisInstance.com.sendRightHandMovement(0);
-          }, thisInstance.options.hands_commandDelay);
+            this.lastSentRightHand = 0;
+            this.com.sendRightHandMovement(0);
+          }, this.options.hands_commandDelay);
         }
       }
 
-      thisInstance.writeBuffer.addInfo(
+      this.writeBuffer.addInfo(
         `Right Hand:
               Fingers held up: ${fingercounter} <br />
-              Hotbar Slot: ${thisInstance.hotbarSlot}`
+              Hotbar Slot: ${this.hotbarSlot}`
       );
     } else {
-      thisInstance.com.sendRightHandMovement(6);
+      this.com.sendRightHandMovement(6);
     }
 
-    thisInstance.options.hands_processCallback({
-      left: thisInstance.leftSent,
-      right: thisInstance.rightSent,
-      hotbar: thisInstance.hotbarSlot,
+    this.options.hands_processCallback({
+      left: this.leftSent,
+      right: this.rightSent,
+      hotbar: this.hotbarSlot,
     });
 
     // Splice data
     if (
-      thisInstance.leftResultQueue.length >
-      thisInstance.options.global_dataSpliceThreshold
+      this.leftResultQueue.length >
+      this.options.global_dataSpliceThreshold
     ) {
-      thisInstance.leftResultQueue = thisInstance.leftResultQueue.splice(
-        thisInstance.leftResultQueue.length / 2
+      this.leftResultQueue = this.leftResultQueue.splice(
+        this.leftResultQueue.length / 2
       );
     }
     if (
-      thisInstance.rightIndexResultQueue.length >
-      thisInstance.options.global_dataSpliceThreshold
+      this.rightIndexResultQueue.length >
+      this.options.global_dataSpliceThreshold
     ) {
-      thisInstance.rightIndexResultQueue =
-        thisInstance.rightIndexResultQueue.splice(
-          thisInstance.rightIndexResultQueue.length / 2
+      this.rightIndexResultQueue =
+        this.rightIndexResultQueue.splice(
+          this.rightIndexResultQueue.length / 2
         );
     }
 
